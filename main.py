@@ -104,7 +104,7 @@ class WSCallbackHandlers:
     @staticmethod
     def on_open(wsocket: WebSocketApp):
         log.info("Connection established, sending credentials")
-        creds_dict = {"api_key_id": secret_consts.key_id, "api_key_secret": secret_consts.secret}
+        creds_dict = {"api_key_id": secret_consts.luno_key_id, "api_key_secret": secret_consts.luno_secret}
         json_data = json.dumps(creds_dict, ensure_ascii=False)
         # send a message to the WebSocket server
         wsocket.send(json_data, opcode=ABNF.OPCODE_TEXT)
@@ -153,11 +153,12 @@ if __name__ == '__main__':
     ccy_par = stream_url[stream_url.rfind('/') + 1:]
     _order_book_state = OrderBookState(symbol=ccy_par, render_flag=False, trade_queue=trade_queue)
     _callback_handlers = WSCallbackHandlers(_order_book_state)
-    # TODO: start another thread which will take the n=level book updates and store them to parquet
 
-    # TODO: start another thread which will take the trades from queue to parquet as separate file
+    # start a consumer thread which will take the trades off queue and persist
     trade_consumer = GcpRePublisher()
     shutdown_event = threading.Event()  # use as a means of communicating with consumer thread
     with futures.ThreadPoolExecutor(max_workers=2) as executor:
         executor.submit(trade_consumer.consume_and_republish, trade_queue, shutdown_event)
         start_ws(stream_url, _order_book_state, _callback_handlers, shutdown_event)
+
+    # TODO: start another thread which will take n levels of book updates from queue and persist
