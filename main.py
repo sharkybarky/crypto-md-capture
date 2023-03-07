@@ -104,7 +104,7 @@ class WSCallbackHandlers:
     @staticmethod
     def on_open(wsocket: WebSocketApp):
         log.info("Connection established, sending credentials")
-        creds_dict = {"api_key_id": secret_consts.luno_key_id, "api_key_secret": secret_consts.luno_secret}
+        creds_dict = {"api_key_id": secret_consts.LUNO_KEY_ID, "api_key_secret": secret_consts.LUNO_SECRET}
         json_data = json.dumps(creds_dict, ensure_ascii=False)
         # send a message to the WebSocket server
         wsocket.send(json_data, opcode=ABNF.OPCODE_TEXT)
