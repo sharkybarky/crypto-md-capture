@@ -41,8 +41,8 @@ class OrderBookState:
 
             # stop when we've processed MAX_BOOK_DEPTH complete price levels
             if len(self.book[side_of_book].keys()) > MAX_BOOK_DEPTH:
-                # TODO: delete the last price level as it will contain incomplete volume/ids if multiple orders at
-                #  this price
+                # TODO: delete the last price level as it could contain incomplete volume/ids if
+                #  there are multiple orders at this price
                 break
 
         self.render()
@@ -73,7 +73,7 @@ class OrderBookState:
                     self.order_register.pop(maker_id)
                 elif maker_order['volume'] < 0:
                     log.error(f"Order volume went negative! \n{maker_order=}")
-                    # TODO: handle this case if it ever happens, for now log error
+                    # handle this case if it ever happens. log error to see
                 self.order_register.update(maker_order)
                 self.update_book_after_trade_or_deletion(maker_order, trade_base)
 
@@ -83,7 +83,7 @@ class OrderBookState:
                 log.debug(f"Updated taker order: \n{taker_order=}")
                 if taker_order['volume'] <= 0:
                     log.error("Order volume went to zero or negative!")
-                    # TODO: TODO: handle this case if it ever happens, for now log error
+                    # handle this case if it ever happens. log error to see
                 self.order_register.update(taker_order)
                 self.update_book_after_trade_or_deletion(taker_order, trade_base)
 

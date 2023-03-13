@@ -1,6 +1,5 @@
 import logging
 from queue import Empty
-
 from google.cloud import pubsub_v1
 
 from trade import Trade
