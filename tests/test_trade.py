@@ -1,5 +1,5 @@
 import unittest
-from _decimal import Decimal
+from decimal import *
 
 from trade import Trade
 import datetime as dt

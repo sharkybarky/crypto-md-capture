@@ -2,7 +2,7 @@ import json
 import queue
 import datetime as dt
 from logging import getLogger
-from _decimal import Decimal
+from decimal import *
 
 log = getLogger(__name__)
 

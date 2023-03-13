@@ -1,5 +1,5 @@
 import unittest
-from _decimal import Decimal
+from decimal import *
 
 from order_book_state import OrderBookState
 import datetime as dt

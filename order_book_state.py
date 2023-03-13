@@ -1,9 +1,7 @@
 import datetime as dt
-from logging import getLogger
-from typing import List
-
 import pandas as pd
-from _decimal import Decimal
+from logging import getLogger
+from decimal import *
 
 from trade import TradeProcessor
 
