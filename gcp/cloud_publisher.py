@@ -32,7 +32,8 @@ class GcpRePublisher:
             api_future = self.publisher.publish(topic=self.topic_path,
                                                 data=message.to_json().encode("utf-8"),
                                                 ordering_key=self.ordering_key)
-            # result() blocks. To resolve API futures asynchronously, use add_done_callback().
+            # result() blocks, but this is okay as we're pulling off our internal buffer.
+            # If we wanted to resolve API futures asynchronously, could use add_done_callback().
             message_id = api_future.result()
             # message_id = api_future.add_done_callback()
             log.info(f"Published a message to {self.topic_path} with ordering_key {self.ordering_key}, "
