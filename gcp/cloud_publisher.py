@@ -1,6 +1,6 @@
 import logging
 from queue import Empty
-from google.cloud import pubsub_v1
+from google.cloud.pubsub_v1 import types, PublisherClient
 
 from trade import Trade
 
@@ -12,8 +12,8 @@ class GcpRePublisher:
         self.project_id = "692233547485"
         self.topic_id = "luno_topic_full_fat"
         self.ordering_key = "luno"
-        self.publisher_options = pubsub_v1.types.PublisherOptions(enable_message_ordering=True)
-        self.publisher = pubsub_v1.PublisherClient(publisher_options=self.publisher_options)
+        self.publisher_options = types.PublisherOptions(enable_message_ordering=True)
+        self.publisher = PublisherClient(publisher_options=self.publisher_options)
         self.topic_path = self.publisher.topic_path(self.project_id, self.topic_id)
 
     def consume_and_republish(self, trade_queue, shutdown_event):
@@ -21,7 +21,7 @@ class GcpRePublisher:
             try:
                 message: Trade = trade_queue.get(timeout=3)
                 log.info(f"GcpRePublisher read message off queue: {message.to_json()=}, queue-size: {trade_queue.qsize()}")
-            except Empty as e:
+            except Empty:
                 # force a timeout so that the blocking call to queue.get() will jump out every so often and
                 # re-evaluate the shutdown_event Event
                 log.debug(f"GcpRePublisher consume loop continuing: {shutdown_event.is_set()=}")

@@ -112,10 +112,12 @@ def start_ws(url, order_book, callbacks, shutdown_evt):
                                 on_open=callbacks.on_open)
     # start the WebSocket connection and run it in a separate thread
     shutdown_with_error = False
+    # noinspection PyBroadException
     try:
         shutdown_with_error = ws.run_forever()
-    except Exception as e:
-        # the only way run_forever unblocks is when an exception is thrown from one of the on_* handlers
+    except Exception:
+        # catch is broad, as the only way run_forever unblocks is when an exception is thrown from one of the
+        # n_* handlers, and we don't know what that will be
         pass
 
     if shutdown_with_error:

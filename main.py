@@ -12,12 +12,12 @@ from gcp.cloud_publisher import GcpRePublisher
 from order_book_state import OrderBookState
 from utils.utils import setup_logging
 
+CRYPTO_ISO_PAIR = "XBTZAR"  # or "ETHZAR"
 
 if __name__ == '__main__':
     setup_logging()
     log = logging.getLogger(__name__)
-    stream_url = "wss://ws.luno.com/api/1/stream/XBTZAR"
-    # stream_url = "wss://ws.luno.com/api/1/stream/ETHZAR"
+    stream_url = f"wss://ws.luno.com/api/1/stream/{CRYPTO_ISO_PAIR}"
     book_queue = queue.Queue(maxsize=100)
     trade_queue = queue.Queue(maxsize=10)
     ccy_par = stream_url[stream_url.rfind('/') + 1:]
